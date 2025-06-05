@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook</title>
+    <link rel="icon" type="image/jpeg" href="facebook_logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Mobile-First Base Styles */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: #1c1e21; /* Dark background */
+            color: #e4e6eb; /* Light text */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: stretch; /* Stretch container to full height */
+            min-height: 100vh;
+            padding-top: 0; /* No top padding on mobile, content starts from very top */
+            box-sizing: border-box; /* Global box-sizing for consistent layout */
+        }
+
+        .container {
+            background-color: #242526; /* Slightly lighter dark for the card */
+            border-radius: 0; /* No border-radius on mobile for full-screen feel */
+            padding: 16px; /* Slightly less padding on mobile */
+            width: 100%; /* Always full width */
+            max-width: 100%; /* Always full width on mobile */
+            box-shadow: none; /* No shadow on full-screen mobile */
+            text-align: center;
+            box-sizing: border-box;
+            min-height: 100vh; /* Make sure it takes full viewport height */
+            display: flex;
+            flex-direction: column; /* Stack children vertically for better flow */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px; /* Consistent margin for mobile header */
+        }
+
+        .header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1877f2; /* Facebook blue */
+        }
+
+        .header .help {
+            color: #a8a8a8;
+            text-decoration: none;
+            font-size: 15px; /* Consistent font size */
+        }
+
+        .illustration {
+            width: 100%; /* Take full width */
+            max-width: 300px; /* Max width of the illustration image */
+            height: auto;
+            margin: 0 auto 20px auto; /* Center and consistent space below */
+            overflow: hidden;
+        }
+
+        .illustration img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 22px; /* Slightly smaller font size for mobile */
+            font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 16px; /* Slightly smaller font size for mobile */
+            line-height: 1.5;
+            margin-bottom: 24px;
+            color: #b0b3b8;
+        }
+
+        .locked-info-box {
+            background-color: #3a3b3c;
+            border-radius: 8px; /* Maintain rounded corners for inner elements */
+            padding: 16px; /* Consistent padding */
+            text-align: left;
+            margin-bottom: 30px; /* Consistent margin */
+        }
+
+        .locked-info-box .lock-icon-small {
+            color: #a8a8a8;
+            font-size: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .locked-info-box p {
+            display: inline;
+            font-size: 15px; /* Consistent font size */
+            line-height: 1.4;
+            color: #e4e6eb;
+            margin: 0;
+        }
+
+        /* "Get started" button styles */
+        .get-started-button {
+            background-color: #1877f2; /* Facebook blue */
+            color: white;
+            border: none;
+            border-radius: 6px; /* Consistent border radius */
+            padding: 12px 24px; /* Consistent padding */
+            font-size: 17px; /* Consistent font size */
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 100;
+        }
+
+        .get-started-button:hover {
+            background-color: #166fe5;
+        }
+
+        /* Desktop specific styles (min-width: 601px) */
+        @media (min-width: 601px) {
+            body {
+                padding-top: 20px; /* Add top padding back for desktop */
+                align-items: flex-start; /* Align to top, not stretch */
+            }
+            .container {
+                border-radius: 8px; /* Rounded corners for desktop */
+                padding: 24px; /* Default padding for desktop */
+                max-width: 500px; /* Max width for desktop */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for desktop */
+            }
+            .header {
+                margin-bottom: 30px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            p {
+                font-size: 17px;
+            }
+            .illustration {
+                margin-bottom: 30px;
+            }
+            .locked-info-box {
+                padding: 16px;
+                margin-bottom: 30px;
+            }
+            .get-started-button {
+                padding: 12px 24px;
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">facebook</div>
+            <a href="#" class="help">Help</a>
+        </div>
+
+        <div class="illustration">
+            <img src="image_28c4c4.png" alt="Account Locked Illustration">
+        </div>
+
+        <h1>Your account has been locked</h1>
+        <p>We saw unusual activity on your account. This may mean that someone has used your account without your knowledge.</p>
+
+        <div class="locked-info-box">
+            <p><i class="fas fa-lock lock-icon-small"></i> <strong>Account locked <span id="lockedDate"></span></strong><br>
+            To protect you, your profile is not visible to people on Facebook and you can't use your account.</p>
+        </div>
+
+        <p>We'll take you through some steps to unlock your account.</p>
+
+        <a href="unlock_steps.html" class="get-started-button">Get started</a>
+    </div>
+
+    <script>
+        function updateLockedDate() {
+            const dateElement = document.getElementById('lockedDate');
+            if (dateElement) {
+                const today = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.textContent = today.toLocaleDateString('en-US', options);
+            }
+        }
+        updateLockedDate();
+    </script>
+</body>
+</html>
