@@ -10,11 +10,9 @@
   "dependencies": {
     "express": "^4.18.2",
     "axios": "^1.6.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "morgan": "^1.10.0",
-    "helmet": "^7.1.0",
-    "express-rate-limit": "^7.2.0"
+    "dotenv": "^16.3.1"
+    // "morgan": "^1.10.0" // Morgan có thể bỏ qua để tối giản nếu không cần logging nâng cao
+    // Các thư viện bảo mật đã được loại bỏ
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
