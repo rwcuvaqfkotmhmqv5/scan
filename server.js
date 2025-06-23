@@ -6,11 +6,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Telegram Proxy Endpoint
 app.post('/api/send-to-telegram', async (req, res) => {
     try {
         const { message } = req.body;
@@ -34,12 +33,13 @@ app.post('/api/send-to-telegram', async (req, res) => {
     }
 });
 
-// Serve frontend
 app.get('*', (req, res) => {
+    if (req.path !== '/') {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
