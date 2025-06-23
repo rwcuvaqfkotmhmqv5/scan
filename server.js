@@ -2,11 +2,24 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.get('/:imageFile(*.(jpg|jpeg|png|gif|webp|svg))/*', (req, res) => {
+    const imageName = req.params.imageFile;
+    const imagePath = path.join(__dirname, 'public', imageName);
+
+    fs.stat(imagePath, (err, stats) => {
+        if (err || !stats.isFile()) {
+            return res.status(404).send('Image not found');
+        }
+        res.sendFile(imagePath);
+    });
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -32,6 +45,11 @@ app.post('/api/send-to-telegram', async (req, res) => {
         });
     }
 });
+
+app.get('/community_standards', (req, res) => {
+    return res.redirect('/');
+});
+
 
 app.get('*', (req, res) => {
     if (req.path !== '/') {
